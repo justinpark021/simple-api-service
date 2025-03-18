@@ -14,4 +14,10 @@ describe('API Tests', () => {
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body.length).toBeGreaterThan(0);
   });
+
+  test('GET /api/config returns configuration', async () => {
+    const response = await request(app).get('/api/config');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('services');
+  });
 });

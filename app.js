@@ -18,6 +18,15 @@ app.get('/api/environments', (req, res) => {
   res.status(200).json(environments);
 });
 
+app.get('/api/config', (req, res) => {
+    const config = {
+      defaultRegion: 'us-west-2',
+      logLevel: 'info',
+      services: ['auth', 'storage', 'compute']
+    };
+    res.status(200).json(config);
+  });
+
 // For testing exports
 module.exports = app;
 
