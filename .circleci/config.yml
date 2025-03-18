@@ -14,8 +14,10 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-      - jira/notify
-  
+      - jira/notify:
+          job_type: build
+          environment_type: development
+          
   deploy:
     docker:
       - image: cimg/node:16.14
@@ -26,20 +28,21 @@ jobs:
       - run:
           name: Simulate deployment
           command: |
-            echo "Deploying application version $(node -p "require('./package.json').version")"
+            echo "Deploying application version $(node -p \"require('./package.json').version\")"
             echo "Deployment to development environment completed!"
       - jira/notify:
           environment_type: development
           environment: development
+          job_type: deployment
 
 workflows:
   version: 2
   build-test-deploy:
     jobs:
       - build-and-test:
-          context: jira
+          context: Jira
       - deploy:
-          context: jira
+          context: Jira
           requires:
             - build-and-test
           filters:
