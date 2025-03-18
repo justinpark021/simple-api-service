@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.0.2
-  jira: circleci/jira@1.3.1
+  node: circleci/node@5.1
+  jira: circleci/jira@2.2.0
 
 jobs:
   build-and-test:
@@ -14,10 +14,7 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-      - jira/notify:
-          job_type: build
-          environment_type: development
-          
+
   deploy:
     docker:
       - image: cimg/node:16.14
@@ -30,21 +27,28 @@ jobs:
           command: |
             echo "Deploying application version $(node -p \"require('./package.json').version\")"
             echo "Deployment to development environment completed!"
-      - jira/notify:
-          environment_type: development
-          environment: development
-          job_type: deployment
 
 workflows:
-  version: 2
   build-test-deploy:
     jobs:
       - build-and-test:
+          post-steps:
+            - jira/notify:
+                job_type: build
+                environment_type: development
+                pipeline_id: << pipeline.id >>
+                pipeline_number: << pipeline.number >>
           context: Jira
       - deploy:
-          context: Jira
           requires:
             - build-and-test
+          post-steps:
+            - jira/notify:
+                environment_type: development
+                environment: development
+                pipeline_id: << pipeline.id >>
+                pipeline_number: << pipeline.number >>
+          context: Jira
           filters:
             branches:
               only: main
