@@ -16,16 +16,17 @@ jobs:
           command: npm test
 
 deploy:
-    executor: node/default
+    docker:
+      - image: cimg/node:16.14
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
       - run:
+          name: Simulate Deployment
           command: |
             echo "Deploying application version 1.0.0"
             echo "Deployment to development environment complete! (Simulation)"
-          name: Simulate Deployment
       - jira/notify:
           environment: staging
           environment_type: staging
