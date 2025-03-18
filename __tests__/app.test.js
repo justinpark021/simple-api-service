@@ -20,4 +20,11 @@ describe('API Tests', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('services');
   });
+
+  test('GET /api/metrics returns API metrics', async () => {
+    const response = await request(app).get('/api/metrics');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('totalRequests');
+    expect(response.body).toHaveProperty('averageResponseTime');
+  });
 });

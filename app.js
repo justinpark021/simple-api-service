@@ -27,6 +27,16 @@ app.get('/api/config', (req, res) => {
     res.status(200).json(config);
   });
 
+app.get('/api/metrics', (req, res) => {
+  const metrics = {
+    totalRequests: 12754,
+    averageResponseTime: 45,
+    errorRate: 0.02,
+    activeUsers: 325
+  };
+  res.status(200).json(metrics);
+});
+
 // For testing exports
 module.exports = app;
 
