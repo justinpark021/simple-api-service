@@ -14,25 +14,24 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-
-deploy:
-    docker:
-      - image: cimg/node:16.14
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run:
-          name: Simulate Deployment
-          command: |
-            echo "Deploying application version 1.0.0"
-            echo "Deployment to development environment complete! (Simulation)"
-      - jira/notify:
-          environment: staging
-          environment_type: staging
-          job_type: deployment
-          pipeline_id: << pipeline.id >>
-          pipeline_number: << pipeline.number >>
+  deploy:
+      docker:
+        - image: cimg/node:16.14
+      steps:
+        - checkout
+        - node/install-packages:
+            pkg-manager: npm
+        - run:
+            name: Simulate deployment
+            command: |
+              echo "Deploying application version 1.0.0"
+              echo "Deployment to development environment complete! (Simulation)"
+        - jira/notify:
+            environment: staging
+            environment_type: staging
+            job_type: deployment
+            pipeline_id: << pipeline.id >>
+            pipeline_number: << pipeline.number >>
 
 workflows:
   build-test-deploy:
